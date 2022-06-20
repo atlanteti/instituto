@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
+Route::get('/', function(){
+    dd('rodou');
+});
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

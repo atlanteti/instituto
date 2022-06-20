@@ -1,0 +1,51 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: instituto-php
+    container_name: instituto-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    expose:
+      - 9000
+      - 9003
+    networks:
+      - instituto
+
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: instituto-nginx
+    restart: unless-stopped
+    ports:
+      - 8002:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+    networks:
+      - instituto
+
+  msqyl:
+    image: mysql:latest
+    container_name: instututo-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=instituto
+      - MYSQL_USER=instituto
+      - MYSQL_PASSWORD=instituto
+    volumes:
+      - ./docker-compose/mysql/data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - instituto
+
+networks:
+  instituto:
+    driver: bridge
