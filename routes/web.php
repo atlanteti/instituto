@@ -24,6 +24,9 @@ Route::middleware([
     })->name('dashboard');
 });
 
+Route::get('/' , function(){
+    return redirect('/login');
+});
 Route::get('/login', function () {
     return view('layouts/login');
 });
